@@ -21,7 +21,7 @@ function initialize() {
                hue : "#FF9900"
             },
             {
-               saturation : -10
+               saturation : 10
             }
          ]
       },
@@ -74,7 +74,7 @@ function initialize() {
 
    map = new google.maps.Map(map_canvas, map_options);
 
-   var decodedPath = google.maps.geometry.encoding.decodePath('mwxqFnvgaS`AqFhEyEfAgLhPqLnAwEbRG~A{C`FSdAuBqCyV|ByFUiDxAeBlAwRtCwIIiHiDaPuHmC_E_PcFk@aH|EnHaFzEv@`EzObIlDbDdUeD~LaAdSiBlB`@fDsBtEhAvCk@tDnBnIYdEnDoJpGg@gGb@l@uEwBbMkC`DeG\wApC_RJU}UqB}EzAvBf@jH{@zUoPbMmAtLiFlH_L`CxIN_AYs@@');
+   var decodedPath = google.maps.geometry.encoding.decodePath('mwxqFnvgaS`AqFhEyEfAgLhPqLnAwEbRG~A{C`FSdAuBqCyV|ByFUiDxAeBlAwRtCwIIiHiDaPuHmC_E_PcFk@aH|EnHaFzEv@`EzObIlDbDdUeD~LaAdSiBlB`@fDsBtEhAvCk@tDnBnIYdEnDoJpGg@gGb@l@uEwBbMkC`DeG\\wApC_RJU}UqB}EzAvBf@jH{@zUoPbMmAtLiFlH_L`CxIN_AYs@@');
    var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 
    var setRegion = new google.maps.Polyline({
@@ -89,7 +89,6 @@ function initialize() {
    map.mapTypes.set('map_fg', stravaMap);
    map.setMapTypeId('map_fg');
 }
-//google.maps.event.addDomListener(window, 'load', initialize);
 
 
 $(document).ready(function(){
