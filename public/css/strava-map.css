@@ -1,6 +1,7 @@
 body {
    overflow: hidden;
 }
+
 #map_canvas {
    position:absolute !important;
    top:0;
