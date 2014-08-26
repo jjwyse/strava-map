@@ -26,3 +26,5 @@ node_modules
 
 # Josh's stuff
 config.js
+.idea/
+**.iml
