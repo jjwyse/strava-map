@@ -73,24 +73,39 @@ function initialize() {
    };
 
    map = new google.maps.Map(map_canvas, map_options);
-
-   var decodedPath = google.maps.geometry.encoding.decodePath('mwxqFnvgaS`AqFhEyEfAgLhPqLnAwEbRG~A{C`FSdAuBqCyV|ByFUiDxAeBlAwRtCwIIiHiDaPuHmC_E_PcFk@aH|EnHaFzEv@`EzObIlDbDdUeD~LaAdSiBlB`@fDsBtEhAvCk@tDnBnIYdEnDoJpGg@gGb@l@uEwBbMkC`DeG\\wApC_RJU}UqB}EzAvBf@jH{@zUoPbMmAtLiFlH_L`CxIN_AYs@@');
-   var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
-
-   var setRegion = new google.maps.Polyline({
-        path: decodedPath,
-        levels: decodedLevels,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map: map
-   });
-
    map.mapTypes.set('map_fg', stravaMap);
    map.setMapTypeId('map_fg');
 }
 
 
+function loadRuns() {
+   $.ajax({
+      type:'GET',
+      url:'/api/runs',
+      success:function(json){
+         console.log("Retrieved Strava runs:");
+         $.each(json, function(key, run){
+            console.log("Run: " + run.name);
+            var decodedPath = google.maps.geometry.encoding.decodePath(run.map.summary_polyline);
+            var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
+
+            var setRegion = new google.maps.Polyline({
+                 path: decodedPath,
+                 levels: decodedLevels,
+                 strokeColor: "#FF0000",
+                 strokeOpacity: 1.0,
+                 strokeWeight: 2,
+                 map: map
+            });
+         });
+         console.log("Finished loading Strava runs");
+      }
+   });
+
+}
+
+
 $(document).ready(function(){
    initialize();
+   loadRuns();
 });
