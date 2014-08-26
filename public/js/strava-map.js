@@ -85,7 +85,7 @@ function loadRuns() {
       success:function(json){
          console.log("Retrieved Strava runs:");
          $.each(json, function(key, run){
-            console.log("Run: " + run.name);
+            console.log("Loading run: " + run.name);
             var decodedPath = google.maps.geometry.encoding.decodePath(run.map.summary_polyline);
             var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 
