@@ -23,11 +23,12 @@ exports.list = function (stravaToken) {
 
          res.on('end', function(){
             var json = JSON.parse(responseString);
-            response.send(json);
+//            response.send(json);
+            response.render('index', {stravaRuns:json});
          });
       }).on('error', function(error){
          console.error(error);
-         response.send("Error");
+         response.render('index', {strava:json});
       });
    };
 };
