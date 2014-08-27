@@ -64,7 +64,7 @@ function initialize() {
    var types = [ 'map_fg', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID ];
    var map_options = {
       center : new google.maps.LatLng(39.7392, -104.9842),
-      zoom : 9,
+      zoom : 12,
       mapTypeId : google.maps.MapTypeId.ROADMAP,
       mapTypeControlOptions : {
          style : google.maps.MapTypeControlStyle.DROPDOWN_MENU,
@@ -96,6 +96,15 @@ function loadRuns() {
                  strokeOpacity: 1.0,
                  strokeWeight: 1,
                  map: map
+            });
+
+            var marker = new google.maps.Marker({
+               position: decodedPath[0],
+               map: map,
+               title: run.name
+            });
+            google.maps.event.addListener(marker, 'click', function() {
+               infowindow.open(map,marker);
             });
          });
          console.log("Finished loading Strava runs");
