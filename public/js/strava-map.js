@@ -18,7 +18,7 @@ function initialize() {
       {
          stylers : [
             {
-               hue : "#FF9900"
+               hue : "#0080ff"
             },
             {
                saturation : 10
@@ -92,9 +92,9 @@ function loadRuns() {
             var setRegion = new google.maps.Polyline({
                  path: decodedPath,
                  levels: decodedLevels,
-                 strokeColor: "#FF0000",
+                 strokeColor: "#ff8000",
                  strokeOpacity: 1.0,
-                 strokeWeight: 2,
+                 strokeWeight: 1,
                  map: map
             });
          });
