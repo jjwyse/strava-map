@@ -9,6 +9,7 @@ function decodeLevels(encodedLevelsString) {
    }
    return decodedLevels;
 }
+
 function initialize() {
    var map_canvas = document.getElementById('map_canvas');
    geocoder = new google.maps.Geocoder();
@@ -64,7 +65,7 @@ function initialize() {
    var types = [ 'map_fg', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID ];
    var map_options = {
       center : new google.maps.LatLng(39.7392, -104.9842),
-      zoom : 12,
+      zoom : 8,
       mapTypeId : google.maps.MapTypeId.ROADMAP,
       mapTypeControlOptions : {
          style : google.maps.MapTypeControlStyle.DROPDOWN_MENU,
@@ -97,12 +98,21 @@ function loadRuns() {
                  strokeWeight: 1,
                  map: map
             });
+            var infowindow = new google.maps.InfoWindow({
+               content: '<b>Name:</b> ' + run.name + '</br>' +
+                  '<b>Date:</b> ' + formatDate(run.start_date) + '</br>' +
+                  '<b>Distance:</b> ' + metersToMiles(run.distance) + ' mi.</br>' +
+                  '<b>Time:</b> ' + secondsToTime(run.moving_time) + '</br>' +
+                  '<b>Elevation Gain:</b> ' + metersToFeet(run.total_elevation_gain) + ' ft.',
+               maxWidth: 200
+            });
 
             var marker = new google.maps.Marker({
                position: decodedPath[0],
                map: map,
                title: run.name
             });
+
             google.maps.event.addListener(marker, 'click', function() {
                infowindow.open(map,marker);
             });
@@ -113,6 +123,28 @@ function loadRuns() {
 
 }
 
+function metersToFeet(meters) {
+   return Math.round((meters*3.2808) * 100) / 100
+}
+
+function metersToMiles(meters) {
+   return Math.round((meters* 0.00062137) * 100) / 100
+}
+
+function formatDate(dateString) {
+   var date = new Date(dateString);
+   return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+}
+
+function secondsToTime(seconds) {
+   var hours = parseInt( seconds / 3600 ) % 24;
+   if (hours < 10) { hours = '0' + hours; }
+   var minutes = parseInt( seconds / 60 ) % 60;
+   if (minutes < 10) { mintes = '0' + minutes; }
+   var seconds = seconds % 60;
+   if (seconds < 10) { seconds = '0' + seconds; }
+   return hours + ':' + minutes + ':' + seconds;
+}
 
 $(document).ready(function(){
    initialize();
