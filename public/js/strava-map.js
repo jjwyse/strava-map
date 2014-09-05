@@ -9,6 +9,7 @@ function decodeLevels(encodedLevelsString) {
    }
    return decodedLevels;
 }
+
 function initialize() {
    var map_canvas = document.getElementById('map_canvas');
    geocoder = new google.maps.Geocoder();
@@ -18,7 +19,7 @@ function initialize() {
       {
          stylers : [
             {
-               hue : "#FF9900"
+               hue : "#0080ff"
             },
             {
                saturation : 10
@@ -64,7 +65,7 @@ function initialize() {
    var types = [ 'map_fg', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID ];
    var map_options = {
       center : new google.maps.LatLng(39.7392, -104.9842),
-      zoom : 9,
+      zoom : 8,
       mapTypeId : google.maps.MapTypeId.ROADMAP,
       mapTypeControlOptions : {
          style : google.maps.MapTypeControlStyle.DROPDOWN_MENU,
@@ -73,24 +74,79 @@ function initialize() {
    };
 
    map = new google.maps.Map(map_canvas, map_options);
-
-   var decodedPath = google.maps.geometry.encoding.decodePath('mwxqFnvgaS`AqFhEyEfAgLhPqLnAwEbRG~A{C`FSdAuBqCyV|ByFUiDxAeBlAwRtCwIIiHiDaPuHmC_E_PcFk@aH|EnHaFzEv@`EzObIlDbDdUeD~LaAdSiBlB`@fDsBtEhAvCk@tDnBnIYdEnDoJpGg@gGb@l@uEwBbMkC`DeG\\wApC_RJU}UqB}EzAvBf@jH{@zUoPbMmAtLiFlH_L`CxIN_AYs@@');
-   var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
-
-   var setRegion = new google.maps.Polyline({
-        path: decodedPath,
-        levels: decodedLevels,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-        map: map
-   });
-
    map.mapTypes.set('map_fg', stravaMap);
    map.setMapTypeId('map_fg');
 }
 
 
+function loadRuns() {
+   $.ajax({
+      type:'GET',
+      url:'/api/runs',
+      success:function(json){
+         console.log("Retrieved Strava runs:");
+         $.each(json, function(key, run){
+            console.log("Loading run: " + run.name);
+            var decodedPath = google.maps.geometry.encoding.decodePath(run.map.summary_polyline);
+            var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
+
+            var setRegion = new google.maps.Polyline({
+                 path: decodedPath,
+                 levels: decodedLevels,
+                 strokeColor: "#ff8000",
+                 strokeOpacity: 1.0,
+                 strokeWeight: 1,
+                 map: map
+            });
+            var infowindow = new google.maps.InfoWindow({
+               content: '<b>Name:</b> ' + run.name + '</br>' +
+                  '<b>Date:</b> ' + formatDate(run.start_date) + '</br>' +
+                  '<b>Distance:</b> ' + metersToMiles(run.distance) + ' mi.</br>' +
+                  '<b>Time:</b> ' + secondsToTime(run.moving_time) + '</br>' +
+                  '<b>Elevation Gain:</b> ' + metersToFeet(run.total_elevation_gain) + ' ft.',
+               maxWidth: 200
+            });
+
+            var marker = new google.maps.Marker({
+               position: decodedPath[0],
+               map: map,
+               title: run.name
+            });
+
+            google.maps.event.addListener(marker, 'click', function() {
+               infowindow.open(map,marker);
+            });
+         });
+         console.log("Finished loading Strava runs");
+      }
+   });
+
+}
+
+function metersToFeet(meters) {
+   return Math.round((meters*3.2808) * 100) / 100
+}
+
+function metersToMiles(meters) {
+   return Math.round((meters* 0.00062137) * 100) / 100
+}
+
+function formatDate(dateString) {
+   var date = new Date(dateString);
+   return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+}
+
+function secondsToTime(seconds) {
+   var hours = parseInt( seconds / 3600 ) % 24;
+   if (hours < 10) { hours = '0' + hours; }
+   var minutes = parseInt( seconds / 60 ) % 60;
+   if (minutes < 10) { mintes = '0' + minutes; }
+   var seconds = seconds % 60;
+   if (seconds < 10) { seconds = '0' + seconds; }
+   return hours + ':' + minutes + ':' + seconds;
+}
+
 $(document).ready(function(){
    initialize();
+   loadRuns();
 });

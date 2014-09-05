@@ -8,21 +8,11 @@ html(lang='en')
 
       link(rel='shortcut icon', href='/images/favicon.ico')
       link(rel='stylesheet', href='/css/strava-map.css')
-      link(rel='stylesheet', href='/css/bootstrap.min.css')
-      script(src='https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false')
-
-      script.
 
    body
       .content
          #map_canvas
 
-      footer
-         .container
-            p &copy;
-               a(href='http://about.me/jjwyse', target='_blank')  josh wyse
-               |  2014
-
+      script(src='https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false')
       script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-      script(src='/js/bootstrap.min.js')
       script(src='/js/strava-map.js')
