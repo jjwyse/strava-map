@@ -1,8 +1,27 @@
 var https = require('https');
+var unirest = require('unirest');
 
 exports.list = function (clientId, clientSecret, oauthCode) {
    return function(request, response) {
       console.log ("Attempting to exchange OAuth code for token");
+
+      var body = {
+         client_id: clientId,
+         client_secret: clientSecret,
+         code: oauthCode
+      }
+
+      unirest.post('https://www.strava.com/oauth/token')
+         .headers({'User-Agent': 'Strava-Map'})
+         .headers({'Content-Type': 'application/json'})
+         .send(JSON.stringify(body))
+         .end(function (response) {
+              if(response.code != 200) {
+                console.log("Failed to exchange OAuth code: " + response.body);
+                res.send(502);
+                return;
+              }
+         });
 
       var accessToken = "TODO";
 
@@ -12,7 +31,7 @@ exports.list = function (clientId, clientSecret, oauthCode) {
             host: 'www.strava.com',
             path: '/api/v3/athlete/activities?per_page=200&page=' + pageNumber,
             headers: {
-               'User-Agent:': 'strava-map',
+               'User-Agent:': 'Strava-Map',
                'Authorization': 'Bearer ' + accessToken
             }
          };

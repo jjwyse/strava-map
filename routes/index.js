@@ -1,7 +1,7 @@
 exports.index = function(responseType, redirectUri, scope, state, approvalPrompt, clientId, clientSecret){
    return function (req, res) {
       res.render('index', {
-         title: 'Strava Heat Map',
+         title: 'Strava Map',
          response_type: responseType,
          redirect_uri: redirectUri,
          scope: scope,
