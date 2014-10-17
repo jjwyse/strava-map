@@ -16,10 +16,15 @@ body {
    height: 100%;
 }
 
-#oauth {
+.floating-panel {
    position: absolute;
    bottom: 0;
    right: 0;
    margin-right: 30px;
    margin-bottom: 30px;
+}
+
+.floating-panel p {
+   font-size: 50px;
+   color: white;
 }

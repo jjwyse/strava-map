@@ -37,6 +37,13 @@ config.strava_client_id = 'TODO';
 config.strava_client_secret = '51a543276876e867b683ac0bd420624787170d59';
 
 
+// custom 404 page
+app.use(function(req, res, next){
+   res.type('text/html');
+   res.status(404);
+   res.render('404');
+});
+
 // GET /
 app.get('/', routes.index(config.strava_response_type, config.strava_redirect_uri, config.strava_scope,
    config.strava_state, config.strava_approval_prompt, config.strava_client_id, config.strava_client_secret));
