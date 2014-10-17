@@ -1,5 +1,6 @@
 var express = require('express');
 
+var handlebars = require('express-handlebars').create({ defaultLayout: 'main'});
 var routes = require('./routes');
 var runs = require('./routes/runs');
 
@@ -12,9 +13,10 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 2997);
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-app.use(express.favicon("/images/favicon.ico"));
+app.use(express.favicon("./public/images/favicon.ico"));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
