@@ -1,14 +1,20 @@
 var https = require('https');
 var unirest = require('unirest');
 
-exports.list = function (clientId, clientSecret, oauthCode) {
+exports.list = function (clientId, clientSecret, state) {
    return function(request, response) {
       console.log ("Attempting to exchange OAuth code for token");
+
+      var queryState = req.query.state;
+      if (queryState != state) {
+         response.send(401);
+         return;
+      }
 
       var body = {
          client_id: clientId,
          client_secret: clientSecret,
-         code: oauthCode
+         code: req.query.code)
       }
 
       unirest.post('https://www.strava.com/oauth/token')
