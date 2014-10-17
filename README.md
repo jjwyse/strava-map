@@ -1,7 +1,7 @@
 strava-map
 ==========
 
-Web application to show map data based around runs on my Strava account
+Web application to show Strava activities in Google Maps
 
 # TODO
 * favicon.ico
