@@ -1,7 +1,10 @@
 var https = require('https');
 
-exports.list = function (stravaToken) {
+exports.list = function (clientId, clientSecret, oauthCode) {
    return function(request, response) {
+      console.log ("Attempting to exchange OAuth code for token");
+
+      var accessToken = "TODO";
 
       // TODO - JJW
       for (pageNumber = 1; pageNumber < 2; pageNumber ++) {
@@ -10,7 +13,7 @@ exports.list = function (stravaToken) {
             path: '/api/v3/athlete/activities?per_page=200&page=' + pageNumber,
             headers: {
                'User-Agent:': 'strava-map',
-               'Authorization': 'Bearer ' + stravaToken
+               'Authorization': 'Bearer ' + accessToken
             }
          };
 

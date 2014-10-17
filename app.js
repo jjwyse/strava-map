@@ -1,6 +1,6 @@
 var express = require('express');
 
-var handlebars = require('express-handlebars').create({ defaultLayout: 'main'});
+var handlebars = require('express-handlebars').create();
 var routes = require('./routes');
 var runs = require('./routes/runs');
 
@@ -28,10 +28,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+config.strava_response_type = 'code';
+config.strava_redirect_uri = 'http://localhost:2779/oauth/callback';
+config.strava_scope = 'view_private';
+config.strava_state = 'strava-heat-map';
+config.strava_approval_prompt = 'force';
+config.strava_client_id = 'TODO';
+config.strava_client_secret = '51a543276876e867b683ac0bd420624787170d59';
 
-app.get('/', routes.index)
-app.get('/api/runs', runs.list(config.strava))
+
+// GET /
+app.get('/', routes.index(config.strava_response_type, config.strava_redirect_uri, config.strava_scope,
+   config.strava_state, config.strava_approval_prompt, config.strava_client_id, config.strava_client_secret));
+
+// GET /oauth/callback
+app.get('/oauth/callback', runs.list(config.strava_client_id, config.strava_client_secret, 'TODO - CODE'));
 
 http.createServer(app).listen(app.get('port'), function () {
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('Strava Heat Map listening on port ' + app.get('port'));
 });
