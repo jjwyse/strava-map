@@ -5,16 +5,16 @@ exports.list = function (clientId, clientSecret, state) {
    return function(request, response) {
       console.log ("Attempting to exchange OAuth code for token");
 
-      var queryState = req.query.state;
-      if (queryState != state) {
-         response.send(401);
-         return;
-      }
+      // var queryState = request.query.state;
+      // if (queryState != state) {
+         // response.send(401);
+         // return;
+      // }
 
       var body = {
          client_id: clientId,
          client_secret: clientSecret,
-         code: req.query.code)
+         code: request.query.code
       }
 
       unirest.post('https://www.strava.com/oauth/token')
@@ -29,9 +29,8 @@ exports.list = function (clientId, clientSecret, state) {
               }
          });
 
-      var accessToken = "TODO";
-
       // TODO - JJW
+      var accessToken = "TODO";
       for (pageNumber = 1; pageNumber < 2; pageNumber ++) {
          var options = {
             host: 'www.strava.com',

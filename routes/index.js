@@ -11,7 +11,3 @@ exports.index = function(responseType, redirectUri, scope, state, approvalPrompt
       });
    };
 };
-
-exports.oauthCallback = function(req, res) {
-   res.render('index', {title: 'TODO - OAuth Callback Hit'});
-}

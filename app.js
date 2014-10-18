@@ -28,14 +28,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-config.strava_response_type = 'code';
-config.strava_redirect_uri = 'http://localhost:2779/oauth/callback';
-config.strava_scope = 'view_private';
-config.strava_state = 'strava-map';
-config.strava_approval_prompt = 'force';
-config.strava_client_id = 'TODO';
-config.strava_client_secret = '51a543276876e867b683ac0bd420624787170d59';
-
 
 // custom 404 page
 app.use(function(req, res, next){
