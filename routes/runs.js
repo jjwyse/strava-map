@@ -27,36 +27,37 @@ exports.list = function (clientId, clientSecret, state) {
                 res.send(502);
                 return;
               }
+              
+               var accessToken = response.body.access_token;
+               console.log("access: " + accessToken);
+               for (pageNumber = 1; pageNumber < 2; pageNumber ++) {
+                  var options = {
+                     host: 'www.strava.com',
+                     path: '/api/v3/athlete/activities?per_page=200&page=' + pageNumber,
+                     headers: {
+                        'User-Agent:': 'Strava-Map',
+                        'Authorization': 'Bearer ' + accessToken
+                     }
+                  };
+
+                  https.get(options, function(res) {
+                     console.log("Strava response code: " + res.statusCode);
+
+                     var responseString = "";
+
+                     res.on('data', function(data){
+                        responseString += data;
+                     });
+
+                     res.on('end', function(){
+                        var json = JSON.parse(responseString);
+                        response.send(json);
+                     });
+                  }).on('error', function(error){
+                     response.send(error)
+                  });
+               }
          });
 
-      // TODO - JJW
-      var accessToken = "TODO";
-      for (pageNumber = 1; pageNumber < 2; pageNumber ++) {
-         var options = {
-            host: 'www.strava.com',
-            path: '/api/v3/athlete/activities?per_page=200&page=' + pageNumber,
-            headers: {
-               'User-Agent:': 'Strava-Map',
-               'Authorization': 'Bearer ' + accessToken
-            }
-         };
-
-         https.get(options, function(res) {
-            console.log("Strava response code: " + res.statusCode);
-
-            var responseString = "";
-
-            res.on('data', function(data){
-               responseString += data;
-            });
-
-            res.on('end', function(){
-               var json = JSON.parse(responseString);
-               response.send(json);
-            });
-         }).on('error', function(error){
-            response.send(error)
-         });
-      }
    };
 };
