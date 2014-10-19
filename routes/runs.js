@@ -1,6 +1,10 @@
 var https = require('https');
 var unirest = require('unirest');
 
+exports.maps = function(request, response) {
+   response.render('strava-map');
+}
+
 exports.list = function (clientId, clientSecret, state) {
    return function(request, response) {
       console.log ("Attempting to exchange OAuth code for token");
@@ -27,7 +31,7 @@ exports.list = function (clientId, clientSecret, state) {
                 res.send(502);
                 return;
               }
-              
+
                var accessToken = response.body.access_token;
                console.log("access: " + accessToken);
                for (pageNumber = 1; pageNumber < 2; pageNumber ++) {

@@ -43,6 +43,8 @@ app.get('/', routes.index(config.strava_response_type, config.strava_redirect_ur
 // GET /oauth/callback
 app.get('/oauth/callback', runs.list(config.strava_client_id, config.strava_client_secret, config.strava_scope));
 
+app.get('/maps', runs.maps);
+
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Strava Map listening on port ' + app.get('port'));
 });
