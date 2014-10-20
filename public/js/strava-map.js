@@ -1,5 +1,6 @@
 var geocoder;
 var map;
+
 function decodeLevels(encodedLevelsString) {
    var decodedLevels = [];
 
@@ -79,15 +80,15 @@ function initialize() {
 }
 
 
-function loadRuns() {
+function loadActivities() {
    $.ajax({
       type:'GET',
-      url:'/api/runs',
+      url:'/api/activities',
       success:function(json){
-         console.log("Retrieved Strava runs:");
-         $.each(json, function(key, run){
-            console.log("Loading run: " + run.name);
-            var decodedPath = google.maps.geometry.encoding.decodePath(run.map.summary_polyline);
+         console.log("Retrieved Strava activities:");
+         $.each(json, function(key, activity){
+            console.log("Loading activity: " + activity.name);
+            var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
             var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 
             var setRegion = new google.maps.Polyline({
@@ -99,25 +100,25 @@ function loadRuns() {
                  map: map
             });
             var infowindow = new google.maps.InfoWindow({
-               content: '<b>Name:</b> ' + run.name + '</br>' +
-                  '<b>Date:</b> ' + formatDate(run.start_date) + '</br>' +
-                  '<b>Distance:</b> ' + metersToMiles(run.distance) + ' mi.</br>' +
-                  '<b>Time:</b> ' + secondsToTime(run.moving_time) + '</br>' +
-                  '<b>Elevation Gain:</b> ' + metersToFeet(run.total_elevation_gain) + ' ft.',
+               content: '<b>Name:</b> ' + activity.name + '</br>' +
+                  '<b>Date:</b> ' + formatDate(activity.start_date) + '</br>' +
+                  '<b>Distance:</b> ' + metersToMiles(activity.distance) + ' mi.</br>' +
+                  '<b>Time:</b> ' + secondsToTime(activity.moving_time) + '</br>' +
+                  '<b>Elevation Gain:</b> ' + metersToFeet(activity.total_elevation_gain) + ' ft.',
                maxWidth: 200
             });
 
             var marker = new google.maps.Marker({
                position: decodedPath[0],
                map: map,
-               title: run.name
+               title: activity.name
             });
 
             google.maps.event.addListener(marker, 'click', function() {
                infowindow.open(map,marker);
             });
          });
-         console.log("Finished loading Strava runs");
+         console.log("Finished loading Strava activities");
       }
    });
 
@@ -148,5 +149,5 @@ function secondsToTime(seconds) {
 
 $(document).ready(function(){
    initialize();
-   loadRuns();
+   loadActivities();
 });

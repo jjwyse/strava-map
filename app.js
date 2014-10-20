@@ -41,9 +41,15 @@ app.get('/', routes.index(config.strava_response_type, config.strava_redirect_ur
    config.strava_state, config.strava_approval_prompt, config.strava_client_id, config.strava_client_secret));
 
 // GET /oauth/callback
-app.get('/oauth/callback', runs.list(config.strava_client_id, config.strava_client_secret, config.strava_scope));
+app.get('/oauth/callback', runs.exchangeOAuthCode(config.strava_client_id, config.strava_client_secret, config.strava_state));
 
-app.get('/maps', runs.maps);
+// GET /maps
+app.get('/maps', runs.map);
+
+// APIs
+// GET /api/activities
+var accessToken = "c34d4e7c0947b7db2d8c5e0d9d8bb07c5236069b"; // TODO
+app.get('/api/activities', runs.listActivities(accessToken));
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Strava Map listening on port ' + app.get('port'));
