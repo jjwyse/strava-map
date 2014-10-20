@@ -48,8 +48,7 @@ app.get('/maps', runs.map);
 
 // APIs
 // GET /api/activities
-var accessToken = "c34d4e7c0947b7db2d8c5e0d9d8bb07c5236069b"; // TODO
-app.get('/api/activities', runs.listActivities(accessToken));
+app.get('/api/activities', runs.listActivities);
 
 http.createServer(app).listen(app.get('port'), function () {
   console.log('Strava Map listening on port ' + app.get('port'));
