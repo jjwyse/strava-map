@@ -23,33 +23,27 @@ exports.listActivities =  function(req, res) {
 };
 
 exports.exchangeOAuthCode = function (clientId, clientSecret, state) {
-   return function(request, response) {
+   return function(req, res) {
       console.log ("Attempting to exchange OAuth code for token");
 
       // validate it's the same state that we sent it
-      if (request.query.state != state) {
-         response.send(401, 'Invalid OAuth state');
+      if (req.query.state != state) {
+         res.send(401, 'Invalid OAuth state');
          return;
-      }
-
-      var body = {
-         client_id: clientId,
-         client_secret: clientSecret,
-         code: request.query.code
       }
 
       unirest.post('https://www.strava.com/oauth/token')
          .headers({'User-Agent': 'Strava-Map'})
          .headers({'Content-Type': 'application/json'})
-         .send(JSON.stringify(body))
+         .send(JSON.stringify({ client_id: clientId, client_secret: clientSecret, code: req.query.code }))
          .end(function (stravaResponse) {
               if(stravaResponse.code != 200) {
                 console.log("Failed to exchange OAuth code: " + stravaResponse.body);
                 res.send(502);
                 return;
               }
-              request.session.stravaAuth = stravaResponse.body.access_token;
-              response.redirect('maps');
+              req.session.stravaAuth = stravaResponse.body.access_token;
+              res.redirect('maps');
          });
 
    };

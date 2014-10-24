@@ -6,9 +6,15 @@ var http = require('http');
 var path = require('path');
 var config = require('./config');
 var app = express();
-
+var Mongo = require('connect-mongo')(express);
 app.use(express.cookieParser());
-app.use(express.session({secret: config.session_key}));
+app.use(express.session({
+   store: new Mongo({
+      url: util.format('mongodb://%s:%s@%s:%s/%s',
+         config.mongo_username, config.mongo_password, config.mongo_host, config.mongo_port, config.mongo_collection)
+   }),
+   secret: config.session_key}
+));
 app.set('port', process.env.PORT || 2997);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -28,13 +34,11 @@ app.use(function(req, res, next){
    res.render('404');
 });
 
-
 // --------------------------------------------------------
 // --------------------------------------------------------
 
 // GET /
 app.get('/', function (req, res) {
-   console.log(req.session);
    res.render('index');
 });
 
