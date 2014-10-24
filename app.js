@@ -7,6 +7,8 @@ var path = require('path');
 var config = require('./config');
 var app = express();
 
+app.use(express.cookieParser());
+app.use(express.session({secret: config.session_key}));
 app.set('port', process.env.PORT || 2997);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -32,6 +34,7 @@ app.use(function(req, res, next){
 
 // GET /
 app.get('/', function (req, res) {
+   console.log(req.session);
    res.render('index');
 });
 
@@ -45,8 +48,12 @@ app.get('/oauth', function(req, res) {
 app.get('/oauth/callback', runs.exchangeOAuthCode(config.strava_client_id, config.strava_client_secret, config.strava_state));
 
 // GET /maps
-app.get('/maps', function(request, response) {
-   return response.render('strava-map');
+app.get('/maps', function(req, res) {
+   if (!req.session.stravaAuth) {
+      console.log('Not logged in - redirecting to homepage');
+      res.redirect('/');
+   }
+   return res.render('strava-map');
 });
 
 // GET /api/activities
