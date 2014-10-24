@@ -1,17 +1,12 @@
 var express = require('express');
-
+var util = require('util');
 var handlebars = require('express-handlebars').create();
-var routes = require('./routes');
 var runs = require('./routes/runs');
-
 var http = require('http');
 var path = require('path');
-
 var config = require('./config');
-
 var app = express();
 
-// all environments
 app.set('port', process.env.PORT || 2997);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -24,11 +19,6 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
-
 // custom 404 page
 app.use(function(req, res, next){
    res.type('text/html');
@@ -36,17 +26,29 @@ app.use(function(req, res, next){
    res.render('404');
 });
 
+
+// --------------------------------------------------------
+// --------------------------------------------------------
+
 // GET /
-app.get('/', routes.index(config.strava_response_type, config.strava_redirect_uri, config.strava_scope,
-   config.strava_state, config.strava_approval_prompt, config.strava_client_id, config.strava_client_secret));
+app.get('/', function (req, res) {
+   res.render('index');
+});
+
+// GET /oauth
+app.get('/oauth', function(req, res) {
+   return res.redirect(util.format('https://www.strava.com/oauth/authorize?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s&state=%s&approval_prompt=%s',
+      config.strava_client_id,config.strava_response_type, config.strava_redirect_uri, config.strava_scope, config.strava_state, config.strava_approval_prompt));
+});
 
 // GET /oauth/callback
 app.get('/oauth/callback', runs.exchangeOAuthCode(config.strava_client_id, config.strava_client_secret, config.strava_state));
 
 // GET /maps
-app.get('/maps', runs.map);
+app.get('/maps', function(request, response) {
+   return response.render('strava-map');
+});
 
-// APIs
 // GET /api/activities
 app.get('/api/activities', runs.listActivities);
 

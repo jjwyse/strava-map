@@ -1,40 +1,23 @@
-var https = require('https');
 var unirest = require('unirest');
 
-exports.map = function(request, response) {
-      return response.render('strava-map');
-};
-
-exports.listActivities =  function(request, response) {
+exports.listActivities =  function(req, res) {
       var accessToken = "c34d4e7c0947b7db2d8c5e0d9d8bb07c5236069b";
       console.log("access: " + accessToken);
-      for (pageNumber = 1; pageNumber < 2; pageNumber ++) {
-         var options = {
-            host: 'www.strava.com',
-            path: '/api/v3/athlete/activities?per_page=200&page=' + pageNumber,
-            headers: {
-               'User-Agent:': 'Strava-Map',
-               'Authorization': 'Bearer ' + accessToken
-            }
-         };
 
-         https.get(options, function(res) {
-            console.log("Strava response code: " + res.statusCode);
-
-            var responseString = "";
-
-            res.on('data', function(data){
-               responseString += data;
-            });
-
-            res.on('end', function(){
-               var json = JSON.parse(responseString);
-               response.send(json);
-            });
-         }).on('error', function(error){
-            response.send(error)
+      // TODO - iterate through each page
+      unirest.get('https://www.strava.com/api/v3/athlete/activities?per_page=200&page=1')
+         .headers({'User-Agent': 'Strava-Map'})
+         .headers({'Content-Type': 'application/json'})
+         .headers({'Authorization': 'Bearer ' + accessToken})
+         .end(function (stravaResponse) {
+              console.log("Strava response code: " + res.statusCode);
+              if(stravaResponse.code != 200) {
+                console.log("Failed to retrieve activities from Strava");
+                res.send(502);
+                return;
+              }
+              res.send(stravaResponse.body);
          });
-      }
 };
 
 exports.exchangeOAuthCode = function (clientId, clientSecret, state) {
