@@ -88,6 +88,9 @@ function loadActivities() {
          console.log("Retrieved Strava activities:");
          $.each(json, function(key, activity){
             console.log("Loading activity: " + activity.name);
+            if (!activity.map.summary_polyline) {
+               activity.map.summary_polyline='';
+            }
             var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
             var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 
