@@ -39,6 +39,9 @@ app.use(function(req, res, next){
 
 // GET /
 app.get('/', function (req, res) {
+   if (req.session.stravaAuth) {
+      res.redirect('/maps');
+   }
    res.render('index');
 });
 
