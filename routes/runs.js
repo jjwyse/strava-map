@@ -7,6 +7,7 @@ exports.listActivities =  function(req, res) {
    }
 
    // TODO - iterate through each page
+   var activities = [];
    unirest.get('https://www.strava.com/api/v3/athlete/activities?per_page=200&page=1')
       .headers({'User-Agent': 'Strava-Map'})
       .headers({'Content-Type': 'application/json'})
@@ -18,7 +19,12 @@ exports.listActivities =  function(req, res) {
              res.send(502);
              return;
            }
-           res.send(stravaResponse.body);
+
+           for (var i = 0; i < stravaResponse.body.length; i ++) {
+             activities.push(stravaResponse.body[i]);
+           }
+
+           res.send(activities);
       });
 };
 
