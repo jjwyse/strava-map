@@ -5,14 +5,21 @@ exports.listActivities =  function(req, res) {
       console.log('Not logged in - redirecting to homepage');
       res.redirect('/');
    }
+   else {
+       console.log('Strava Auth: ' + req.session.stravaAuth);
+   }
 
-   // TODO - iterate through each page
    var activities = [];
-   unirest.get('https://www.strava.com/api/v3/athlete/activities?per_page=200&page=1')
+   retrieve(req, res, 1, 2, activities);
+};
+
+function retrieve(req, res, page, per_page, activities) {
+   unirest.get('https://www.strava.com/api/v3/athlete/activities?per_page=' + per_page + '&page=' + page)
       .headers({'User-Agent': 'Strava-Map'})
       .headers({'Content-Type': 'application/json'})
       .headers({'Authorization': 'Bearer ' + req.session.stravaAuth})
       .end(function (stravaResponse) {
+           debugger;
            console.log("Strava response code: " + res.statusCode);
            if(stravaResponse.code != 200) {
              console.log("Failed to retrieve activities from Strava");
@@ -23,10 +30,14 @@ exports.listActivities =  function(req, res) {
            for (var i = 0; i < stravaResponse.body.length; i ++) {
              activities.push(stravaResponse.body[i]);
            }
-
-           res.send(activities);
+           if (per_page == stravaResponse.body.length) {
+                retrieve(req, res, page + 1, per_page, activities);
+           } else {
+                res.send(activities);
+           }
       });
-};
+}
+
 
 exports.exchangeOAuthCode = function (clientId, clientSecret, state) {
    return function(req, res) {
