@@ -118,11 +118,13 @@ function loadActivities() {
                  strokeWeight: 1,
                  map: map
             });
+            var miles = metersToMiles(activity.distance);
             var infowindow = new google.maps.InfoWindow({
                content: '<b>Name:</b> ' + activity.name + '</br>' +
                   '<b>Date:</b> ' + formatDate(activity.start_date) + '</br>' +
-                  '<b>Distance:</b> ' + metersToMiles(activity.distance) + ' mi.</br>' +
+                  '<b>Distance:</b> ' + miles + ' mi.</br>' +
                   '<b>Time:</b> ' + secondsToTime(activity.moving_time) + '</br>' +
+                  '<b>Pace:</b> ' + secondsToPace(activity.moving_time, miles) + ' min./mi.</br>' +
                   '<b>Elevation Gain:</b> ' + metersToFeet(activity.total_elevation_gain) + ' ft.',
                maxWidth: 200
             });
@@ -137,11 +139,6 @@ function loadActivities() {
                infowindow.open(map,marker);
             });
          });
-
-         //console.log('Low lat: ' + lowlat);
-         //console.log('Low long: ' + lowlng);
-         //console.log('Hi lat: ' + hilat);
-         //console.log('Hi long: ' + hilng);
 
          var southWest = new google.maps.LatLng(lowlat, lowlng);
          var northEast = new google.maps.LatLng(hilat, hilng);
@@ -175,6 +172,17 @@ function secondsToTime(seconds) {
    var seconds = seconds % 60;
    if (seconds < 10) { seconds = '0' + seconds; }
    return hours + ':' + minutes + ':' + seconds;
+}
+
+function secondsToPace(seconds, miles) {
+   var secondsPerMile = Math.round((seconds / miles) * 1) / 1;
+   var pace = Math.round((secondsPerMile / 60) * 1) / 1;
+   var secondsLeft = secondsPerMile % 60;
+   var responseString = pace.toString() + ':' + secondsLeft.toString();
+   if (secondsLeft < 10) {
+      responseString = pace.toString() + ':0' + secondsLeft.toString();
+   }
+   return responseString;
 }
 
 $(document).ready(function(){
