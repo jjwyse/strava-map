@@ -66,8 +66,8 @@ function initialize() {
    var types = [ 'map_fg', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID ];
    var map_options = {
       // TODO - use HTML 5 geo location
-      center : new google.maps.LatLng(39.7392, -104.9842),
-      zoom : 8,
+      center : new google.maps.LatLng(39.7392, -98.9842),
+      zoom : 4,
       mapTypeId : google.maps.MapTypeId.ROADMAP,
       mapTypeControlOptions : {
          style : google.maps.MapTypeControlStyle.DROPDOWN_MENU,

@@ -15,7 +15,7 @@ app.use(express.session({
    }),
    secret: config.session_key}
 ));
-app.set('port', process.env.PORT || 2997);
+app.set('port', process.env.PORT || 2998);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
