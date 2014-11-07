@@ -176,7 +176,7 @@ function secondsToTime(seconds) {
 
 function secondsToPace(seconds, miles) {
    var secondsPerMile = Math.round((seconds / miles) * 1) / 1;
-   var pace = Math.round((secondsPerMile / 60) * 1) / 1;
+   var pace = Math.floor(secondsPerMile / 60);
    var secondsLeft = secondsPerMile % 60;
    var responseString = pace.toString() + ':' + secondsLeft.toString();
    if (secondsLeft < 10) {
