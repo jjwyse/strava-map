@@ -10,7 +10,8 @@ exports.listActivities =  function(req, res) {
    }
 
    var activities = [];
-   retrieve(req, res, 1, 2, activities);
+   /* Retrieves all of your activities by paginating through everything from Strava. */
+   retrieve(req, res, 1, 200, activities);
 };
 
 function retrieve(req, res, page, per_page, activities) {
@@ -19,7 +20,6 @@ function retrieve(req, res, page, per_page, activities) {
       .headers({'Content-Type': 'application/json'})
       .headers({'Authorization': 'Bearer ' + req.session.stravaAuth})
       .end(function (stravaResponse) {
-           debugger;
            console.log("Strava response code: " + res.statusCode);
            if(stravaResponse.code != 200) {
              console.log("Failed to retrieve activities from Strava");

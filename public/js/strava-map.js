@@ -65,6 +65,7 @@ function initialize() {
    var stravaMap = new google.maps.StyledMapType(styles, { name : 'Strava' });
    var types = [ 'map_fg', google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.HYBRID ];
    var map_options = {
+      // TODO - use HTML 5 geo location
       center : new google.maps.LatLng(39.7392, -104.9842),
       zoom : 8,
       mapTypeId : google.maps.MapTypeId.ROADMAP,
