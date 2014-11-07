@@ -5,9 +5,6 @@ exports.listActivities =  function(req, res) {
       console.log('Not logged in - redirecting to homepage');
       res.redirect('/');
    }
-   else {
-       console.log('Strava Auth: ' + req.session.stravaAuth);
-   }
 
    var activities = [];
    /* Retrieves all of your activities by paginating through everything from Strava. */
