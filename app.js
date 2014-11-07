@@ -1,3 +1,4 @@
+
 var express = require('express');
 var util = require('util');
 var handlebars = require('express-handlebars').create();
@@ -15,7 +16,7 @@ app.use(express.session({
    }),
    secret: config.session_key}
 ));
-app.set('port', process.env.PORT || 2998);
+app.set('port', process.env.PORT || 2997);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));

@@ -87,12 +87,27 @@ function loadActivities() {
       url:'/api/activities',
       success:function(json){
          console.log("Retrieved Strava activities:");
+         var lowlat = 90;
+         var lowlng = 180;
+         var hilat = -90;
+         var hilng = -180;
+
          $.each(json, function(key, activity){
             console.log("Loading activity: " + activity.name);
             if (!activity.map.summary_polyline) {
                return;
             }
             var decodedPath = google.maps.geometry.encoding.decodePath(activity.map.summary_polyline);
+            for (index = 0; index < decodedPath.length; ++index) {
+                var lat = decodedPath[index].lat();
+                var lng = decodedPath[index].lng();
+
+                lowlat = (lat < lowlat) ? lat : lowlat;
+                lowlng = (lng < lowlng) ? lng : lowlng;
+                hilat = (lat > hilat) ? lat : hilat;
+                hilng = (lng > hilng) ? lng : hilng;
+            }
+
             var decodedLevels = decodeLevels('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 
             var setRegion = new google.maps.Polyline({
@@ -122,6 +137,17 @@ function loadActivities() {
                infowindow.open(map,marker);
             });
          });
+
+         //console.log('Low lat: ' + lowlat);
+         //console.log('Low long: ' + lowlng);
+         //console.log('Hi lat: ' + hilat);
+         //console.log('Hi long: ' + hilng);
+
+         var southWest = new google.maps.LatLng(lowlat, lowlng);
+         var northEast = new google.maps.LatLng(hilat, hilng);
+         var bounds = new google.maps.LatLngBounds(southWest,northEast);
+         map.fitBounds(bounds);
+
          console.log("Finished loading Strava activities");
       }
    });
