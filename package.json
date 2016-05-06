@@ -9,12 +9,14 @@
     "url": "git://github.com/jjwyse/strava-map.git"
   },
   "scripts": {
-    "start": "node app.js"
+    "test": "mocha test --reporter spec --ui bdd",
+    "start": "node src/app.js"
   },
   "dependencies": {
+    "connect-mongo": "0.3.x",
     "express": "3.4.8",
-    "unirest": "*",
     "express-handlebars": "*",
-    "connect-mongo": "0.3.x"
+    "mocha": "^2.4.5",
+    "unirest": "*"
   }
 }
