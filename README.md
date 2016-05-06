@@ -1,22 +1,10 @@
-strava-map
-==========
+# strava-map <sub><sup>| Strava Heat Map</sup></sub>
 
-Web application to show Strava activities in Google Maps
+--------------------------------------------------------------------------------
 
-# TODO
-* privacy page to make it clear what I'm doing with your activities
-* filtering based on:
- * the type of activity (hike, run, bike, etc.)
- * shoes
- * date range
- * runs over a certain distance
- * ...
-* show key stats from the displayed activities:
- * fastest mile
- * most vertical
- * ...
-* use a different pin and investigate a way to not show them all:
- * hover-over?
- * button to turn on/off
-* toggle english/metric system
-* better styling with the map
+[![version](http://img.shields.io/badge/version-v0.1.0-blue.svg)](#) [![versioning](http://img.shields.io/badge/versioning-semver-blue.svg)](http://semver.org/) [![branching](http://img.shields.io/badge/branching-github%20flow-blue.svg)](https://guides.github.com/introduction/flow/)
+[![Circle CI](https://circleci.com/gh/jjwyse/strava-map.svg?style=shield)](https://circleci.com/gh/jjwyse/strava-map)
+[![Coverage Status](https://coveralls.io/repos/github/jjwyse/strava-map/badge.svg?branch=master)](https://coveralls.io/github/jjwyse/strava-map?branch=master)
+
+## Overview
+The free version of the Strava heat map

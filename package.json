@@ -1,7 +1,13 @@
 {
   "name": "strava-map",
-  "version": "0.0.1",
-  "private": true,
+  "author": "jjwyse",
+  "license": "ISC",
+  "version": "0.1.0",
+  "description": "Strava heat map",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jjwyse/strava-map.git"
+  },
   "scripts": {
     "start": "node app.js"
   },
@@ -9,6 +15,6 @@
     "express": "3.4.8",
     "unirest": "*",
     "express-handlebars": "*",
-    "connect-mongo" : "0.3.x"
+    "connect-mongo": "0.3.x"
   }
 }

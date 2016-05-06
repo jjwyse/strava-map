@@ -1,18 +1,20 @@
-var unirest = require('unirest');
+'use strict';
 
-exports.listActivities =  function(req, res) {
+const unirest = require('unirest');
+
+exports.listActivities =  (req, res) => {
    if (!req.session.stravaAuth) {
       console.log('Not logged in - redirecting to homepage');
       res.redirect('/');
    }
 
-   var activities = [];
+   const activities = [];
    /* Retrieves all of your activities by paginating through everything from Strava. */
    retrieve(req, res, 1, 200, activities);
 };
 
-function retrieve(req, res, page, per_page, activities) {
-   unirest.get('https://www.strava.com/api/v3/athlete/activities?per_page=' + per_page + '&page=' + page)
+const retrieve = (req, res, page, per_page, activities) => {
+   unirest.get(`https://www.strava.com/api/v3/athlete/activities?per_page=${per_page}&page=${page}`)
       .headers({'User-Agent': 'Strava-Map'})
       .headers({'Content-Type': 'application/json'})
       .headers({'Authorization': 'Bearer ' + req.session.stravaAuth})
@@ -33,11 +35,10 @@ function retrieve(req, res, page, per_page, activities) {
                 res.send(activities);
            }
       });
-}
+};
 
-
-exports.exchangeOAuthCode = function (clientId, clientSecret, state) {
-   return function(req, res) {
+exports.exchangeOAuthCode = (clientId, clientSecret, state) => {
+   return (req, res) => {
       console.log ("Attempting to exchange OAuth code for token");
 
       // validate it's the same state that we sent it
