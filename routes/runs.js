@@ -27,7 +27,7 @@ const retrieve = (req, res, page, per_page, activities) => {
 };
 
 exports.listActivities = (req, res) => {
-  if (!req.session.stravaAuth) {
+  if (!req.session) {
     console.log('Not logged in - redirecting to homepage');
     res.redirect('/');
   }

@@ -5,16 +5,15 @@ const handlebars = require('express-handlebars').create();
 const runs = require('./routes/runs');
 const http = require('http');
 const path = require('path');
-const config = require('./config');
 const app = express();
-const Mongo = require('connect-mongo')(express);
+const session = require('express-session')
+app.use(session({
+  secret: process.env.SESSION_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 app.use(express.cookieParser());
-app.use(express.session({
-  store: new Mongo({
-    url: `mongodb://${config.mongo_username}:${config.mongo_password}@${config.mongo_host}:${config.mongo_port}/${config.mongo_collection}`
-  }),
-  secret: config.session_key
-}));
 app.set('port', process.env.PORT || 2997);
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
@@ -39,15 +38,16 @@ app.use((req, res, next) => {
 
 // GET /
 app.get('/', (req, res) => {
+  console.log('hit me');
   if (req.session.stravaAuth) res.redirect('/maps');
   res.render('index');
 });
 
 // GET /oauth
-app.get('/oauth', (req, res) => res.redirect(`https://www.strava.com/oauth/authorize?client_id=${config.strava_client_id}&response_type=${config.strava_response_type}&redirect_uri=${config.strava_redirect_uri}&scope=${config.strava_scope}&state=${config.strava_state}&approval_prompt=${config.strava_approval_prompt}`));
+app.get('/oauth', (req, res) => res.redirect(`https://www.strava.com/oauth/authorize?client_id=${process.env.STRAVA_CLIENT_ID}&response_type=${process.env.STRAVA_RESPONSE_TYPE}&redirect_uri=${process.env.STRAVA_REDIRECT_URI}&scope=${process.env.STRAVA_SCOPE}&state=${process.env.STRAVA_STATE}&approval_prompt=${process.env.STRAVA_APPROVAL_PROMPT}`));
 
 // GET /oauth/callback
-app.get('/oauth/callback', runs.exchangeOAuthCode(config.strava_client_id, config.strava_client_secret, config.strava_state));
+app.get('/oauth/callback', runs.exchangeOAuthCode(process.env.STRAVA_CLIENT_ID, process.env.STRAVA_CLIENT_SECRET, process.env.STRAVA_STATE));
 
 // GET /maps
 app.get('/maps', (req, res) => {
