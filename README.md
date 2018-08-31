@@ -8,3 +8,4 @@
 
 ## Overview
 The free version of the Strava heat map
+
