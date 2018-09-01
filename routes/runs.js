@@ -11,6 +11,7 @@ const retrieve = (req, res, page, per_page, activities) => {
       console.log(`Strava response code: ${res.statusCode}`);
       if (stravaResponse.code !== 200) {
         console.log('Failed to retrieve activities from Strava');
+        console.log(`Response from strava: ${stravaResponse.code}`);
         res.send(502);
         return;
       }
@@ -57,7 +58,9 @@ exports.exchangeOAuthCode = (clientId, clientSecret, state) => {
           res.send(502);
           return;
         }
-        req.session.stravaAuth === stravaResponse.body.access_token;
+        console.log(`Setting session stravaAuth key to ${stravaResponse.body.access_token}`);
+        req.session.stravaAuth = stravaResponse.body.access_token;
+        console.log(req.session);
         res.redirect('maps');
       });
 

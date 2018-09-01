@@ -10,8 +10,7 @@ const session = require('express-session')
 app.use(session({
   secret: process.env.SESSION_KEY,
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
+  saveUninitialized: true
 }))
 app.use(express.cookieParser());
 app.set('port', process.env.PORT || 2997);
@@ -38,7 +37,6 @@ app.use((req, res, next) => {
 
 // GET /
 app.get('/', (req, res) => {
-  console.log('hit me');
   if (req.session.stravaAuth) res.redirect('/maps');
   res.render('index');
 });
@@ -51,6 +49,7 @@ app.get('/oauth/callback', runs.exchangeOAuthCode(process.env.STRAVA_CLIENT_ID, 
 
 // GET /maps
 app.get('/maps', (req, res) => {
+  console.log(req.session);
   if (!req.session.stravaAuth) {
     console.log('Not logged in - redirecting to homepage');
     res.redirect('/');

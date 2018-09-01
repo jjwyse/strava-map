@@ -140,11 +140,6 @@ function loadActivities() {
             });
          });
 
-         var southWest = new google.maps.LatLng(lowlat, lowlng);
-         var northEast = new google.maps.LatLng(hilat, hilng);
-         var bounds = new google.maps.LatLngBounds(southWest,northEast);
-         map.fitBounds(bounds);
-
          console.log("Finished loading Strava activities");
       }
    });
